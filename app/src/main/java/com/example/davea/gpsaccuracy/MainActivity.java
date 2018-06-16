@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public Location currentLocation;
     LocationListener locationListener;
 
-    final int UPDATE_INTERVAL = 1000;
+    final int UPDATE_INTERVAL = 1000;   //when on, update location data every UPDATE_INTERVAL milliseconds
 
     public boolean on = true;
 
