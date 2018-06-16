@@ -16,18 +16,34 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
 
-    LocationManager locationManager;
+    //UI:
     TextView TV1;   //top textview
     TextView TV2;   //bottom textview
     Button startStop;   //start/stop button for pausing/resuming data collection
+
+    //Location:
     public Location currentLocation;
+    LocationManager locationManager;
     LocationListener locationListener;
 
+    //Time:
+    //create calendar to convert epoch time to readable time
+    Calendar cal = Calendar.getInstance();
+    //create simple date format to show just 12hr time
+    SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss aa");
+
+    //Constants:
     final int UPDATE_INTERVAL = 1000;   //when on, update location data every UPDATE_INTERVAL milliseconds
 
+    //Variables:
     public boolean on = true;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if(on) locationDetails();   //only get data when not paused
-
 
     }
 
@@ -111,8 +126,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void accuracy(){
-        //print accuracy value on screen
-        TV2.setText("Accuracy:\n" + currentLocation.getAccuracy());
+        //convert epoch time to calendar data
+        cal.setTimeInMillis(currentLocation.getTime());
+        //print accuracy value on screen along with coordinates and time
+        TV2.setText("Accuracy: " + currentLocation.getAccuracy() + "\n\nLatitude: " + currentLocation.getLatitude()
+                + "\nLongitude: " + currentLocation.getLongitude()+ "\n\n " + dateFormat.format(cal.getTime()));
     }
 
 
