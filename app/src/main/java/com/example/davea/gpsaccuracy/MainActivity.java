@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 //when location changes, display accuracy of that reading
                 currentLocation = location;
-                if(on) accuracy();
+                accuracy();
             }
 
             @Override
