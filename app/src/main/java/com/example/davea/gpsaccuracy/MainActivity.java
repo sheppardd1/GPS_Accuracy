@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(on) locationDetails();   //only get data when not paused
+        locationDetails();   //only get data when not paused
 
     }
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 //when location changes, display accuracy of that reading
                 currentLocation = location;
-                accuracy();
+                if(on) accuracy();
             }
 
             @Override
