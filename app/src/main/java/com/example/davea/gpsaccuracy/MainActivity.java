@@ -121,7 +121,10 @@ public class MainActivity extends AppCompatActivity {
             }
             else locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
         }
-        else locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
+        else{
+            assert locationManager != null;
+            locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
+        }
 
     }
 
