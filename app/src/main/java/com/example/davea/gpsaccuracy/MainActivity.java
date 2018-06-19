@@ -2,6 +2,7 @@ package com.example.davea.gpsaccuracy;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -38,10 +39,12 @@ public class MainActivity extends AppCompatActivity {
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss aa");
 
     //Constants:
-    final int UPDATE_INTERVAL = 1000;   //when on, update location data every UPDATE_INTERVAL milliseconds
+    //final int UPDATE_INTERVAL = 1000;   //when on, update location data every UPDATE_INTERVAL milliseconds
 
     //Variables:
     public boolean on = true;
+    static int interval = 1000;
+    static boolean setInterval = false;
 
 
 
@@ -68,16 +71,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void setup(){
 
+        if(!setInterval) {
+            startActivity(new Intent(getApplicationContext(), GetInterval.class));
+        }
+
         TV1 = findViewById(R.id.TV1);
         TV1.setText("Running\n");
         TV2 = findViewById(R.id.TV2);
         startStop = findViewById(R.id.startStop);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-
     }
 
     public void locationDetails(){
+        final int UPDATE_INTERVAL = interval;
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
