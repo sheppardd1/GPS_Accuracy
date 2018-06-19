@@ -60,8 +60,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 on = !on;
                 //show status to user
-                if(!on) TV1.setText("Paused\n");
-                else TV1.setText("Running\n");
+                if(!on) {
+                    TV1.setText("Paused\n");
+                    locationManager.removeUpdates(locationListener);
+                }
+                else{
+                    TV1.setText("Running\n");
+                    locationDetails();
+                }
             }
         });
 
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 //when location changes, display accuracy of that reading
                 currentLocation = location;
-                if(on) accuracy();
+                accuracy();
             }
 
             @Override
