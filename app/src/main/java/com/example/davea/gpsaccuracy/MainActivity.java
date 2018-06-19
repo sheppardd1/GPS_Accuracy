@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Variables:
     public boolean on = true;
-    static int interval = 1000;
+    static int interval = 1000; //default update interval is 1000 seconds
     static boolean setInterval = false;
 
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void locationDetails(){
-        final int UPDATE_INTERVAL = interval;
+        final int UPDATE_INTERVAL = interval;   //set UPDATE_INTERVAL to user-specified value
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
