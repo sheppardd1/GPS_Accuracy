@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Size;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean on = true;
     static int interval = 1000; //default update interval is 1000 seconds
     static boolean setInterval = false;
+    boolean setStartTime = false;
+    int numDataPoints = 0;
 
 
 
@@ -61,11 +64,22 @@ public class MainActivity extends AppCompatActivity {
                 on = !on;
                 //show status to user
                 if(!on) {
-                    TV1.setText("Paused\n");
+                    TV1.setText("Stopped\n");
+                    //convert epoch time to calendar data
+                    cal.setTimeInMillis(System.currentTimeMillis());
+                    if(TV2.getText() != "") {
+                        TV2.setText(TV2.getText() + "\nEnd Time: " + dateFormat.format(cal.getTime()) + "\nInterval: " + (interval/1000) + " s\nReadings taken: " + numDataPoints);
+                    }
+                    else{
+                        TV2.setText("");
+                    }
+                    setStartTime = false;
+                    numDataPoints = 0;
                     locationManager.removeUpdates(locationListener);
                 }
                 else{
                     TV1.setText("Running\n");
+                    TV2.setText("");
                     locationDetails();
                 }
             }
@@ -143,10 +157,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void accuracy(){
         //convert epoch time to calendar data
-        cal.setTimeInMillis(currentLocation.getTime());
-        //print accuracy value on screen along with coordinates and time
+        if(!setStartTime){
+            cal.setTimeInMillis(System.currentTimeMillis());
+            setStartTime = true;
+        }
+        //print accuracy value on screen along with coordinates and start time
         TV2.setText("Accuracy: " + currentLocation.getAccuracy() + "\n\nLatitude: " + currentLocation.getLatitude()
-                + "\nLongitude: " + currentLocation.getLongitude()+ "\n\n " + dateFormat.format(cal.getTime()));
+                + "\nLongitude: " + currentLocation.getLongitude()+ "\n\n" + "Start Time: " + dateFormat.format(cal.getTime()));
+        ++numDataPoints;
     }
 
 
