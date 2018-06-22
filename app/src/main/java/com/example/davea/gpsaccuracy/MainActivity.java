@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
     LocationListener locationListener;
 
     //Time:
-    //create calendar to convert epoch time to readable time
-    Calendar cal = Calendar.getInstance();
     //create simple date format to show just 12hr time
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss aa");
 
@@ -43,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
     //final int UPDATE_INTERVAL = 1000;   //when on, update location data every UPDATE_INTERVAL milliseconds
 
     //Variables:
-    public boolean on = true;
     static int interval = 1000; //default update interval is 1000 seconds
-    static boolean setInterval = false;
-    boolean setStartTime = false;
-    int numDataPoints = 0;
+    int numDataPoints = 0;  //number of times location has updated
+    public boolean on = true;   //true if location is actively being reequested
+    static boolean setInterval = false; //true if update interval has been set
+    boolean setFirstSignalTime = false; //true if firstSignalTime has been set for the session
+    String startTime;   //time that Start button is pressed to start program
+    long firstSignalTime = 0;   //time that first GPS signal is received
 
 
 
@@ -65,15 +65,13 @@ public class MainActivity extends AppCompatActivity {
                 //show status to user
                 if(!on) {
                     TV1.setText("Stopped\n");
-                    //convert epoch time to calendar data
-                    cal.setTimeInMillis(System.currentTimeMillis());
                     if(TV2.getText() != "") {
-                        TV2.setText(TV2.getText() + "\nEnd Time: " + dateFormat.format(cal.getTime()) + "\nInterval: " + (interval/1000) + " s\nReadings taken: " + numDataPoints);
+                        TV2.setText(TV2.getText() + "\nEnd Time: " + dateFormat.format(System.currentTimeMillis()) + "\n\nUpdate Interval: " + (interval/1000) + " second\nReadings taken: " + numDataPoints);
                     }
                     else{
                         TV2.setText("");
                     }
-                    setStartTime = false;
+                    setFirstSignalTime = false;
                     numDataPoints = 0;
                     locationManager.removeUpdates(locationListener);
                 }
@@ -105,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void locationDetails(){
         final int UPDATE_INTERVAL = interval;   //set UPDATE_INTERVAL to user-specified value
+        startTime = dateFormat.format(System.currentTimeMillis());
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -157,13 +156,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void accuracy(){
         //convert epoch time to calendar data
-        if(!setStartTime){
-            cal.setTimeInMillis(System.currentTimeMillis());
-            setStartTime = true;
+        if(!setFirstSignalTime){
+            firstSignalTime = System.currentTimeMillis();
+            setFirstSignalTime = true;
         }
         //print accuracy value on screen along with coordinates and start time
         TV2.setText("Accuracy: " + currentLocation.getAccuracy() + "\n\nLatitude: " + currentLocation.getLatitude()
-                + "\nLongitude: " + currentLocation.getLongitude()+ "\n\n" + "Start Time: " + dateFormat.format(cal.getTime()));
+                + "\nLongitude: " + currentLocation.getLongitude()+ "\n\n" + "Start Time: " + startTime
+                + "\nFirst GPS Signal: " + dateFormat.format(firstSignalTime));
+
         ++numDataPoints;
     }
 
