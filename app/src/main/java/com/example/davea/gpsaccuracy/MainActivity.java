@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setup(){
 
-        if(!setInterval) {
+        if(setInterval == false) {
             startActivity(new Intent(getApplicationContext(), GetInterval.class));
         }
 
@@ -102,54 +102,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void locationDetails(){
-        final int UPDATE_INTERVAL = interval;   //set UPDATE_INTERVAL to user-specified value
-        startTime = dateFormat.format(System.currentTimeMillis());
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                //when location changes, display accuracy of that reading
-                currentLocation = location;
-                accuracy();
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-                //not used right now
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-                //not used right now
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-                TV1.setText("GPS permissions have been denied.\nNeed GPS permissions for app to function.");
-            }
-        };
-
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Toast.makeText(this, "GPS not available", Toast.LENGTH_LONG);
-        }
-
-        //if at least Marshmallow, need to ask user's permission to get GPS data
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            //if permission is not yet granted, ask for it
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
-                if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    //if permission still not granted, tell user app will not work without it
-                    Toast.makeText(this, "Need GPS permissions for app to function", Toast.LENGTH_LONG);
+        if(setInterval) {   //ensures that interval has been set
+            final int UPDATE_INTERVAL = interval;   //set UPDATE_INTERVAL to user-specified value
+            startTime = dateFormat.format(System.currentTimeMillis());
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    //when location changes, display accuracy of that reading
+                    currentLocation = location;
+                    accuracy();
                 }
-                //once permission is granted, set up location listener
-                //updating every UPDATE_INTERVAL milliseconds, regardless of distance change
-                else locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                    //not used right now
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                    //not used right now
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    TV1.setText("GPS permissions have been denied.\nNeed GPS permissions for app to function.");
+                }
+            };
+
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                Toast.makeText(this, "GPS not available", Toast.LENGTH_LONG);
             }
-            else locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
-        }
-        else{
-            assert locationManager != null;
-            locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
+
+            //if at least Marshmallow, need to ask user's permission to get GPS data
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                //if permission is not yet granted, ask for it
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        //if permission still not granted, tell user app will not work without it
+                        Toast.makeText(this, "Need GPS permissions for app to function", Toast.LENGTH_LONG);
+                    }
+                    //once permission is granted, set up location listener
+                    //updating every UPDATE_INTERVAL milliseconds, regardless of distance change
+                    else
+                        locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
+                } else
+                    locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
+            } else {
+                assert locationManager != null;
+                locationManager.requestLocationUpdates("gps", UPDATE_INTERVAL, 0, locationListener);
+            }
         }
 
     }

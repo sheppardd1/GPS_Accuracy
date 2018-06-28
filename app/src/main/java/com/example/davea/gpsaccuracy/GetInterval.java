@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -37,6 +38,9 @@ public class GetInterval extends AppCompatActivity {
                     MainActivity.setInterval = true;    //ensures that this activity only runs once
                     //go back to main activity
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+                else{
+                    Toast.makeText(GetInterval.this, "Must Enter a Value", Toast.LENGTH_LONG).show();
                 }
             }
         });
