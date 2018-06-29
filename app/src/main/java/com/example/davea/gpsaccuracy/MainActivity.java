@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Location:
     public Location currentLocation;
-    LocationManager locationManager;
-    LocationListener locationListener;
+    static LocationManager locationManager;
+    static LocationListener locationListener;
 
     //Time:
     //create simple date format to show just 12hr time
@@ -73,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     setFirstSignalTime = false;
                     numDataPoints = 0;
-                    locationManager.removeUpdates(locationListener);
+                    if(locationListener != null) {
+                        locationManager.removeUpdates(locationListener);
+                    }
                 }
                 else{
                     TV1.setText("Running\n");

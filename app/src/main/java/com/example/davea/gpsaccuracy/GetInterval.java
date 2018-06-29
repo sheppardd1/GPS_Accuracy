@@ -31,6 +31,11 @@ public class GetInterval extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //remove location listener so that we don't have duplicated if going back to MainActivity after having been there before
+                if(MainActivity.locationListener != null) {
+                    MainActivity.locationManager.removeUpdates(MainActivity.locationListener);
+                }
+
                 //note: using an unsigned EditText, so don't have to worry about negative numbers
                 if(interval_input.getText().toString().trim().length() > 0) {   //ensure interval_input is not empty
                     MainActivity.interval = Integer.valueOf(interval_input.getText().toString()); //set interval to value specified in interval_input
