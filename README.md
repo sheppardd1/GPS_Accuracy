@@ -12,7 +12,7 @@ While running:
 * Latitude
 * Longitude
 * Start time
-* Time of first GPS reading
+* Time of first GPS reading<br />
 While stopped, it also shows:
 * Stop time
 * Inputted update interval
