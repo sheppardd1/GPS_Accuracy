@@ -17,3 +17,5 @@ While stopped, it also shows:
 * Stop time
 * Inputted update interval
 * Number of readings taken
+## Compatibility
+Android 4.0 Ice Cream Sandwich and up
