@@ -19,5 +19,6 @@ While stopped, it also shows:
 * Number of readings taken
 ## Screenshot in stoppped mode
 <img src="screenshot.png" width="240" height="427">
+
 ## Compatibility
 Android 4.0 Ice Cream Sandwich and up
